@@ -1,20 +1,28 @@
 package com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.controller;
 
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.model.Produto;
 import com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.service.IProdutoService;
+import com.rebecacorp.aplicacaokafkacsv.util.WriterGenerator;
 
 @RestController
 public class ProdutoController {
     
+    
+
     @Autowired
     private IProdutoService service;
 
     @GetMapping("/")
-    public ResponseEntity<String> hello(){
+    public ResponseEntity<String> hello() throws IOException{
+
         return ResponseEntity.ok("Welcome to API");
     }
 
@@ -29,7 +37,16 @@ public class ProdutoController {
     }
 
     @PostMapping("/produtos")
-    public ResponseEntity<?> adicionarProduto(@RequestBody Produto novo){
+    public ResponseEntity<?> adicionarProduto(@RequestBody Produto novo) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException{
+        CSVWriter csvWriter = WriterGenerator.generatewriter();
+
+        String[] gravacao = {
+            String.format("id: %d", novo.getId()),
+            String.format("nome: %s", novo.getNome()),
+            String.format("estoque: %d", novo.getEstoque())
+        };
+        csvWriter.writeNext(gravacao);
+        csvWriter.close();
         return service.adicionarProduto(novo);
     }
 
