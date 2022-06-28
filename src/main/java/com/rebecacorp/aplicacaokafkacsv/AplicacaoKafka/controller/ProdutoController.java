@@ -1,21 +1,31 @@
 package com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.controller;
 
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.model.Produto;
 import com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.service.IProdutoService;
+import com.rebecacorp.aplicacaokafkacsv.util.S3Util;
 import com.rebecacorp.aplicacaokafkacsv.util.WriterGenerator;
+
 
 @RestController
 public class ProdutoController {
     
-    
+
 
     @Autowired
     private IProdutoService service;
@@ -37,7 +47,7 @@ public class ProdutoController {
     }
 
     @PostMapping("/produtos")
-    public ResponseEntity<?> adicionarProduto(@RequestBody Produto novo) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException{
+    public ResponseEntity<?> adicionarProduto(@RequestBody Produto novo) throws Exception{
         CSVWriter csvWriter = WriterGenerator.generatewriter();
 
         String[] gravacao = {
@@ -45,8 +55,12 @@ public class ProdutoController {
             String.format("nome: %s", novo.getNome()),
             String.format("estoque: %d", novo.getEstoque())
         };
+        InputStream file = new FileInputStream("/Users/rebeca.ferreira/Desktop/repos-github-pessoal/aplicacao-kafka-csv/pessoas.csv");
         csvWriter.writeNext(gravacao);
         csvWriter.close();
+
+        S3Util.uploadFile("pessoas.csv",file);
+       
         return service.adicionarProduto(novo);
     }
 
