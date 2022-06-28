@@ -2,6 +2,7 @@ package com.rebecacorp.aplicacaokafkacsv.AplicacaoKafka.model;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "produtos")
 public class Produto {
@@ -49,5 +50,11 @@ public class Produto {
 
     public void setEstoque(Integer estoque) {
         this.estoque = estoque;
+    }
+
+    @Override
+    public String toString() {
+        String message = "id" + getId() + "nome" + getNome() + "estoque" + getEstoque();
+        return message;
     }
 }
