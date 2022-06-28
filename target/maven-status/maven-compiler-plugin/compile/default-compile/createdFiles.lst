@@ -1,0 +1,8 @@
+com/rebecacorp/aplicacaokafkacsv/AplicacaoKafka/service/IProdutoService.class
+com/rebecacorp/aplicacaokafkacsv/util/S3Util.class
+com/rebecacorp/aplicacaokafkacsv/AplicacaoKafka/controller/ProdutoController.class
+com/rebecacorp/aplicacaokafkacsv/AplicacaoKafka/dao/ProdutoDAO.class
+com/rebecacorp/aplicacaokafkacsv/AplicacaoKafka/service/ProdutoServiceImpl.class
+com/rebecacorp/aplicacaokafkacsv/util/WriterGenerator.class
+com/rebecacorp/aplicacaokafkacsv/AplicacaoKafka/model/Produto.class
+com/rebecacorp/aplicacaokafkacsv/AplicacaoKafka/AplicacaoKafkaCsvApplication.class
